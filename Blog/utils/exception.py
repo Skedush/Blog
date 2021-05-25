@@ -6,6 +6,7 @@ from .constant import CODE_NOT_FOUND_ERROR, MSG_NOT_FOUND_ERROR, MSG_UNKNOWN_ERR
 
 def custom_exception_handler(exc, context):
     response = exception_handler(exc, context)
+    print('response: ', response)
     errorMessage = response.data.copy()
     if response is not None:
         response.data.clear()
@@ -34,7 +35,7 @@ def custom_exception_handler(exc, context):
             response.data['message'] = MSG_METHOD_ERROR
             response.data['code'] = CODE_METHOD_ERROR
 
-        elif response.status_code == 500:
+        elif response.status_code >= 500:
             response.data['message'] = MSG_SERVER_ERROR
             response.data['code'] = CODE_SERVER_ERROR
 

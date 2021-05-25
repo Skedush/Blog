@@ -1,12 +1,15 @@
+from rest_framework import permissions
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from Blog.utils.customViewSet import CustomViewSet, CustomListAPIView
 from .serializers import ArticleSerializer, CategorySerializer, MenuSerializer
 from .models import Category, Article
 from Blog.utils.drfPaginate import DrfPaginate
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 class CategoryViewset(CustomViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -20,6 +23,7 @@ class CategoryViewset(CustomViewSet):
 
 
 class MenuViewset(CustomListAPIView):
+    permission_classes = [AllowAny]
     queryset = Category.objects.all()
     serializer_class = MenuSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -38,6 +42,12 @@ class MenuViewset(CustomListAPIView):
 
 
 class ArticleViewset(CustomViewSet):
+    permission_classes_by_action = {'create': [IsAuthenticated],
+                                    'list': [AllowAny],
+                                    'update': [IsAuthenticated],
+                                    'retrieve': [AllowAny],
+                                    'destroy': [IsAuthenticated]
+                                    }
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -45,6 +55,13 @@ class ArticleViewset(CustomViewSet):
     search_fields = ['title', 'sub_title', 'content']
     filterset_fields = ['category']
     ordering_fields = ['sort', 'update_time', 'create_time']
+
+    # 根据action获取权限
+    def get_permissions(self):
+        try:
+            return [permissions() for permissions in self.permission_classes_by_action[self.action]]
+        except KeyError:
+            return [permissions() for permissions in self.permission_classes]
 
     # 获取菜单
     def get_queryset(self):

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -49,7 +50,10 @@ AUTH_USER_MODEL = 'user.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-    'EXCEPTION_HANDLER': ('Blog.utils.exception.custom_exception_handler')
+    'EXCEPTION_HANDLER': ('Blog.utils.exception.custom_exception_handler'),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
 }
 
 MIDDLEWARE = [
@@ -97,6 +101,40 @@ DATABASES = {
     }
 }
 
+SECRET_KEY = "Blog"
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=8),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,  # TokenRefreshView之后会返回一个新的access和refresh
+    'BLACKLIST_AFTER_ROTATION': False,  # 令牌黑名单
+    'UPDATE_LAST_LOGIN': True,  # 登录时更新数据库字段
+
+    'ALGORITHM': 'HS256',  # token签名算法
+    'SIGNING_KEY': SECRET_KEY,  # 签名key
+    'VERIFYING_KEY': None,  # 验证key，使用RS签名算法才需要设置
+    'AUDIENCE': None,
+    'ISSUER': None,
+
+    # 需要身份验证的视图将接受的授权头类型(Authorization: Blog <token>)
+    'AUTH_HEADER_TYPES': ('Blog',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',  # http header验证名称Authorization
+    'USER_ID_FIELD': 'id',  # 包含在生成的令牌中以标识用户
+
+    # 生成的令牌中的声明，它将用于存储用户标识符。例如，'user id'的设定值意味着生成的令牌包含包含用户标识符的用户id声明。
+    'USER_ID_CLAIM': 'user_id',
+    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -120,15 +158,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
