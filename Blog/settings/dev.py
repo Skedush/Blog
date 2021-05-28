@@ -5,6 +5,7 @@ from .common import *
 DEBUG = True
 
 INSTALLED_APPS = [
+    'simpleui',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

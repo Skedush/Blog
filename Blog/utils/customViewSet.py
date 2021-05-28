@@ -3,6 +3,9 @@
 '''
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import status,  generics
+from rest_framework_simplejwt import serializers
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from rest_framework_simplejwt.views import TokenViewBase
 from .response import CustomResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -85,6 +88,7 @@ class CustomViewSet(ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
+        # 当有is_deleted字段时修改为false，无时删除数据库条目
         if(instance.is_delete != None):
             instance.is_delete = True
             self.perform_update(instance)
@@ -106,3 +110,22 @@ class CustomListAPIView(generics.ListAPIView):
             return CustomResponse(data=self.get_paginated_response(serializer.data), code=200, msg="success", success=True,  status=status.HTTP_200_OK)
         serializer = self.get_serializer(queryset, many=True)
         return CustomResponse(data=serializer.data, code=200, msg="success", success=True,  status=status.HTTP_200_OK)
+
+
+class CustomTokenObtainPairView(TokenViewBase):
+    """
+    Takes a set of user credentials and returns an access and refresh JSON web
+    token pair to prove the authentication of those credentials.
+    """
+    serializer_class = serializers.TokenObtainPairSerializer
+
+    # 重写post方法
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
+
+        return CustomResponse(data=serializer.validated_data, status=status.HTTP_200_OK, code=200, msg="success", success=True,)

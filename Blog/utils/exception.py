@@ -1,3 +1,4 @@
+''' 自定义接口异常response'''
 from rest_framework.views import exception_handler
 from .constant import CODE_NOT_FOUND_ERROR, MSG_NOT_FOUND_ERROR, MSG_UNKNOWN_ERROR, CODE_UNKNOWN_ERROR, \
     CODE_AUTH_ERROR, MSG_AUTH_ERROR, CODE_SERVER_ERROR, MSG_SERVER_ERROR, MSG_REJECT_ERROR, CODE_REJECT_ERROR, \

@@ -18,7 +18,7 @@ from django.urls import path, include
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 from drf_yasg import openapi
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 from .utils.responseAuthenticationRule import MyTokenObtainPairView
 
 
@@ -36,13 +36,16 @@ scheme_view = get_schema_view(
 
 urlpatterns = [
     path('', include('Blog.apps.article.urls')),
+    path('', include('Blog.apps.user.urls')),
+    # django后台管理路由页面
     path(r"admin/", admin.site.urls),
+    # token相关
     path(r'api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path(r'api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path(r'api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    # 接口文档相关
     path(r'api_doc/', scheme_view.with_ui('swagger',
          cache_timeout=0), name='Blog API'),
-
     path(r'api_redoc/', scheme_view.with_ui('redoc',
          cache_timeout=0), name='Blog API')
 ]

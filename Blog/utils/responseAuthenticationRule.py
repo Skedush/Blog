@@ -1,8 +1,10 @@
+from Blog.utils.customViewSet import CustomTokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework_simplejwt.views import TokenObtainPairView
+from Blog.apps.user.serializers import UserSerializer
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    # 构建token方法
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
@@ -10,9 +12,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     def validate(self, attrs):
         data = super().validate(attrs)
-        data['username'] = self.user.username
+        data['user'] = UserSerializer(self.user).data
         return data
 
 
-class MyTokenObtainPairView(TokenObtainPairView):
+class MyTokenObtainPairView(CustomTokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer

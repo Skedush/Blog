@@ -6,6 +6,7 @@ from django.db import models
 class Category(models.Model):
     id = models.AutoField(primary_key=True)  # 自增长
     name = models.CharField(max_length=30, verbose_name='分类名称')  # 长度做多30的字符串
+
     describe = models.CharField(
         max_length=254, verbose_name='分类描述', null=True, blank=True)
     create_time = models.DateTimeField(
