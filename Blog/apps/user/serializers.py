@@ -29,8 +29,8 @@ class UserSerializer(serializers.ModelSerializer):
 class UserInfoSerializer(serializers.ModelSerializer):
     # 获得user指定的属性
     user = UserSerializer(
-        fields=('id', 'username', 'email', 'last_login', 'gender'))
+        fields=('username', 'email', 'last_login', 'gender'))
 
     class Meta:
         model = UserInfo
-        fields = ('id', 'phone', 'home', 'git', 'motton', 'user')
+        fields = ('phone', 'home', 'git', 'motton', 'user')

@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-import os
 from pathlib import Path
 from datetime import timedelta
 
@@ -22,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-sc*rm%nw8aoyxgcn53noj#$$l2b_kclskg5jdz3f19kn+!*(b1'
+# SECRET_KEY = 'django-insecure-sc*rm%nw8aoyxgcn53noj#$$l2b_kclskg5jdz3f19kn+!*(b1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -103,7 +102,7 @@ DATABASES = {
     }
 }
 
-SECRET_KEY = "Blog"
+SECRET_KEY = "Blog"  # 加密算法签名
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=8),
@@ -160,9 +159,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'zh-hans'
+LANGUAGE_CODE = 'zh-hans'  # 后台管理语言
 
-TIME_ZONE = 'Asia/Shanghai'
+TIME_ZONE = 'Asia/Shanghai'  # 后台时区修改
 
 USE_I18N = True
 
@@ -175,8 +174,6 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
-SIMPLEUI_DEFAULT_THEME = 'ant.design.css'
 
 
 # Default primary key field type

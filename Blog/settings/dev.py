@@ -21,6 +21,4 @@ INSTALLED_APPS = [
     'Blog.apps.user',
     'Blog.apps.visitorfc',
 ]
-
-
-ALLOWED_HOSTS = '*'
+SIMPLEUI_DEFAULT_THEME = 'ant.design.css'  # 后台管理皮肤，可以去官方选择
