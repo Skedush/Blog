@@ -7,7 +7,7 @@
 ## 安装依赖
 
 ```
-$pip install -r Blog/requriements.txt
+$pip install -r Blog/requirements.txt
 ```
 
 ---
